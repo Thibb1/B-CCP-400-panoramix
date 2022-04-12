@@ -26,7 +26,7 @@ clean:
 fclean:	clean
 	$(RM) $(OUT)
 
-re:		all
+re:		fclean all
 
 debug:	CFLAGS	+=	-ggdb
 debug:	re
