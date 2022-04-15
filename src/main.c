@@ -9,13 +9,16 @@
 
 int main(int ac, char **av)
 {
-    ASSERT(ac != 5)
+    ASSERT(ac != 5);
     parse_args(av);
-    ASSERT(sem_init(druid_sem(), 0, 0), "SEM INIT ERROR")
-    ASSERT(sem_init(villager_sem(), 0, 0), "SEM INIT ERROR")
+    ASSERT(sem_init(druid_sem(), 0, 0), "SEM INIT ERROR");
+    ASSERT(sem_init(villager_sem(), 0, 0), "SEM INIT ERROR");
+    ASSERT(pthread_mutex_init(my_mutex(), NULL), "MUTEX INIT ERROR");
     fight();
     sem_destroy(druid_sem());
     sem_destroy(villager_sem());
+    pthread_mutex_destroy(my_mutex());
+    DESTROY(village());
 }
 
 void parse_args(char **av)

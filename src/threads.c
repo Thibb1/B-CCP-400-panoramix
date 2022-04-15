@@ -21,6 +21,10 @@ void fight(void)
     }
     for (unsigned int i = 0; i < nb - 1; i++)
         pthread_join(thread[i], NULL);
+    pthread_cancel(thread[nb - 1]);
+    pthread_join(thread[nb - 1], NULL);
+    free(idx);
+    free(thread);
 }
 
 void *thread_druid(void *av)
@@ -53,7 +57,6 @@ void *thread_villager(void *av)
     sleep(1);
     while (fights) {
         sem_wait(villager_sem());
-        printf(DRINK, idx, village()->pot_size);
         get_drink(idx);
         printf(FIGHT, idx, --fights);
         sem_post(villager_sem());
@@ -65,10 +68,12 @@ void *thread_villager(void *av)
 void get_drink(unsigned int idx)
 {
     if (village()->pot_size) {
+        printf(DRINK, idx, village()->pot_size);
         pthread_mutex_lock(my_mutex());
         village()->pot_size--;
         pthread_mutex_unlock(my_mutex());
     } else if (village()->nb_refills) {
+        printf(DRINK, idx, village()->pot_size);
         printf(PANO, idx);
         sem_post(druid_sem());
         sem_wait(villager_sem());

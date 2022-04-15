@@ -48,5 +48,8 @@ if (v) { \
     fprintf(stderr, "%s\n", DEF_OR_ARG(__VA_ARGS__ __VA_OPT__(,) USAGE)); \
     exit(84); \
 }
-
+    #define DESTROY(v) \
+if (v) { \
+    free(v); \
+}
 #endif
